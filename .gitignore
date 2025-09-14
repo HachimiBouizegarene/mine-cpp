@@ -1,0 +1,23 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build
+Debug/
+Release/
+x64/
+x86/
+*.obj
+*.pdb
+*.idb
+*.log
+*.tlog
+*.vcxproj.user
+
+# Autres
+*.exe
+*.dll
+*.lib
+*.ilk
+*.ipch
