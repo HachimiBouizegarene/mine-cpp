@@ -17,6 +17,7 @@ namespace RenewEngine {
 		size_t sizeDataInBytes = 0;
 		std::atomic<bool>* readyPtr = nullptr;
 		std::function<void()> onUploadEnd = nullptr;
+		ComPtr<ID3D12Resource> uploadResource;
 	};
 
 
@@ -44,7 +45,7 @@ namespace RenewEngine {
 		ID3D12Device* m_device = nullptr;
 		std::vector<UploadCommandSlot> m_commandSlots;
 
-		uint64_t m_fenceValue = 0;
+		std::atomic<uint64_t> m_fenceValue = 0;
 		JobSystem* m_jobSystem;
 
 		std::atomic<bool> m_shouldQuit = false;

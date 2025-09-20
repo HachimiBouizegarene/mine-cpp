@@ -8,12 +8,16 @@ RenewEngine::Renderer::~Renderer()
 
 void RenewEngine::Renderer::Init(HWND hwnd, unsigned int width, unsigned int height)
 {
+	m_width = width;
+	m_height = height;
 	m_fenceValues.resize(m_backBuffersCount);
 	m_commandAllocators.resize(m_backBuffersCount);
 	ComPtr<IDXGIFactory5> dxgiFactory;
 	ThrowIfFailed(CreateDXGIFactory2(NULL, IID_PPV_ARGS(&dxgiFactory)));
 
 	ThrowIfFailed(dxgiFactory->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &m_supportTearing, sizeof(m_supportTearing)));
+	if (m_supportTearing) std::cout << "Support Tearing !" << std::endl;
+	else  std::cout << "Do Not Support Tearing !" << std::endl;
 
 	ThrowIfFailed(D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_device)));
 
@@ -36,7 +40,9 @@ void RenewEngine::Renderer::Init(HWND hwnd, unsigned int width, unsigned int hei
 	// Pour la VR
 	swapChainDesc.Stereo = false;
 	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
-	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
+	if (m_supportTearing) swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
+	else swapChainDesc.Flags = 0;
+	
 	// MSAA
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
@@ -113,7 +119,7 @@ void RenewEngine::Renderer::Init(HWND hwnd, unsigned int width, unsigned int hei
 	ThrowIfFailed(m_commandList->Close());
 }
 
-void RenewEngine::Renderer::BeginFrame()
+ID3D12GraphicsCommandList* RenewEngine::Renderer::BeginFrame()
 {
 	ThrowIfFailed(m_commandAllocators[m_currentBackBufferIndex]->Reset());
     ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_currentBackBufferIndex].Get(), nullptr));
@@ -132,10 +138,25 @@ void RenewEngine::Renderer::BeginFrame()
 	D3D12_CPU_DESCRIPTOR_HANDLE DSVHandle = m_DSVDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 
 	m_commandList->OMSetRenderTargets(1, &RTVHandle, FALSE, &DSVHandle);
+	D3D12_VIEWPORT viewport = {};
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = static_cast<float>(m_width);
+	viewport.Height = static_cast<float>(m_height);
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	m_commandList->RSSetViewports(1, &viewport);
 
+	D3D12_RECT scissorRect = {};
+	scissorRect.left = 0;
+	scissorRect.top = 0;
+	scissorRect.right = m_width;
+	scissorRect.bottom = m_height;
+	m_commandList->RSSetScissorRects(1, &scissorRect);
 	FLOAT clearColor[] = { 1.0f, 0.0f, 0.0f, 0.0f };
 	m_commandList->ClearRenderTargetView(RTVHandle, clearColor, 0, nullptr);
 	m_commandList->ClearDepthStencilView(DSVHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	return m_commandList.Get();
 };
 
 void RenewEngine::Renderer::EndFrame()
@@ -154,9 +175,9 @@ void RenewEngine::Renderer::EndFrame()
 	};
 	m_commandQueue->ExecuteCommandLists(1, commandList);
 	m_fenceValue++;
-	m_commandQueue->Signal(m_fence.Get(), m_fenceValue);
+	ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), m_fenceValue));
 	m_fenceValues[m_currentBackBufferIndex] = m_fenceValue;
-	ThrowIfFailed(m_swapChain->Present(0, DXGI_PRESENT_ALLOW_TEARING));
+	ThrowIfFailed(m_swapChain->Present(0, 0));
 
 	m_currentBackBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
 
@@ -179,9 +200,10 @@ void RenewEngine::Renderer::WaitForGpu()
 
 void RenewEngine::Renderer::EnableDebugLayer()
 {
-	D3D12GetDebugInterface(IID_PPV_ARGS(&m_debug));
-	m_debug->EnableDebugLayer();
-	std::cout << "DirectX Debug Layer enabled" << std::endl;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&m_debug)))){
+		m_debug->EnableDebugLayer();
+		std::cout << "DirectX Debug Layer enabled" << std::endl;
+	}	
 }
 
 ID3D12Device* RenewEngine::Renderer::GetDevice()

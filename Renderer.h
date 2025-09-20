@@ -14,7 +14,7 @@ namespace RenewEngine {
 		~Renderer();
 	public:
 		void Init(HWND hwnd, unsigned int width, unsigned int height);
-		void BeginFrame();
+		ID3D12GraphicsCommandList* BeginFrame();
 		void EndFrame();
 		void WaitForGpu();
 		void EnableDebugLayer();
@@ -35,6 +35,8 @@ namespace RenewEngine {
 		uint64_t m_fenceValue = 0;
 		ComPtr<ID3D12Debug> m_debug;
 		HANDLE m_fenceEvent;
+		UINT m_width;
+		UINT m_height;
 		unsigned int m_backBuffersCount = 2;
 		BOOL m_supportTearing = false;
 		std::vector<uint64_t> m_fenceValues;

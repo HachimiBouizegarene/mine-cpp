@@ -6,10 +6,7 @@
 #include <iostream>
 void RenewEngine::Engine::Run()
 {
-	// TEMPORARY
-	m_vertexBuffer = std::make_unique<VertexBuffer>(m_uploadBuffer.get(), test_vertices, sizeof(test_vertices), sizeof(VertexPos));
-	
-	// ---------------- END TEMPORARY
+
 
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	int frames = 0;
@@ -17,7 +14,17 @@ void RenewEngine::Engine::Run()
 	while (!m_window->shouldQuit)
 	{
 		m_window->PeekMessages();
-		m_renderer->BeginFrame();
+		ID3D12GraphicsCommandList *commandListPtr =  m_renderer->BeginFrame();
+
+		if (m_vertexBuffer->IsReady() && m_indexBuffer->IsReady())
+		{
+			m_vertexBuffer->Bind(commandListPtr);
+			m_indexBuffer->Bind(commandListPtr);
+			m_pso->Bind(commandListPtr);
+			commandListPtr->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			commandListPtr->DrawInstanced(3, 1, 0, 0);
+		}
+		
 		m_renderer->EndFrame();
 		frames++;
 		auto now = std::chrono::high_resolution_clock::now();
@@ -45,5 +52,12 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 	m_renderer->EnableDebugLayer();
 	m_renderer->Init(m_window->GetHwnd(), width, height);
 	m_uploadBuffer = std::make_unique<UploadBuffer>(m_renderer->GetDevice(), m_jobSystem.get());
+
+
+	// TEMPORARY
+	m_indexBuffer = std::make_unique<IndexBuffer>(m_uploadBuffer.get(), test_indicies, sizeof(test_indicies));
+	m_vertexBuffer = std::make_unique<VertexBuffer>(m_uploadBuffer.get(), test_vertices, sizeof(test_vertices), sizeof(VertexPos));
+	m_pso = std::make_unique<RenewEngine::PSO>(m_renderer->GetDevice(), L"VertexShader.cso", L"PixelShader.cso");
+	// ---------------- END TEMPORARY
 
 }

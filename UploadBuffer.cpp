@@ -55,14 +55,12 @@ void RenewEngine::UploadBuffer::ThreadLoop()
 		UploadCommandSlot* commandSlot;
 		{
 			std::unique_lock<std::mutex> lock(m_mutex);
-			std::cout << "Upload Thread Is Waiting for job..." << std::endl;
 			m_cvUploadJobs.wait(lock, [this]() {
 				return m_uploadJobs.size() > 0 || m_shouldQuit;
 				});
 			if (m_shouldQuit) return;
 			job = m_uploadJobs.front();
 			m_uploadJobs.pop();
-			std::cout << "Upload Thread Is Waiting for a free command slot..." << std::endl;
 			m_cvFreeCommandSlot.wait(lock, [this]() {
 				return m_freeCommandSlots.size() > 0 || m_shouldQuit;
 				});
@@ -70,8 +68,6 @@ void RenewEngine::UploadBuffer::ThreadLoop()
 			commandSlot = m_freeCommandSlots.front();
 			m_freeCommandSlots.pop();
 		}
-
-		std::cout << "Upload Thread Is Working..." << std::endl;
 		commandSlot->commandAllocator->Reset();
 		commandSlot->commandList->Reset(commandSlot->commandAllocator.Get(), nullptr);
 
@@ -109,11 +105,10 @@ void RenewEngine::UploadBuffer::ThreadLoop()
 
 		//std::cout << "Uploaded Resource CPU Done" << std::endl;
 
-		std::shared_ptr<JobState> jobState = m_jobSystem->RegisterJob([&]() {
+		std::shared_ptr<JobState> jobState = m_jobSystem->RegisterJob([this, job,commandSlot, uploadResource]() {
 			bool shouldWait = false;
 			HANDLE event = nullptr;
 			{
-				std::unique_lock<std::mutex> lock(m_fenceMutex);
 				if (m_fence->GetCompletedValue() < m_fenceValue)
 				{
 					event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
@@ -128,9 +123,12 @@ void RenewEngine::UploadBuffer::ThreadLoop()
 				m_freeCommandSlots.push(commandSlot);
 				m_cvFreeCommandSlot.notify_one();
 			}
-			if (job.onUploadEnd) job.onUploadEnd();
+		
+			if (job.onUploadEnd) {
+				job.onUploadEnd();
+			}
 			if (job.readyPtr) *(job.readyPtr) = true;
-			std::cout << "Resource uploaded !" << std::endl;
+			std::cout << "Job IS DONE !" << std::endl;
 		});
 
 	}

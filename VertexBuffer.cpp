@@ -11,11 +11,23 @@ RenewEngine::VertexBuffer::VertexBuffer(UploadBuffer* uploadBuffer, void* vertic
     UploadJob uploadJob;
     uploadJob.dataPtr = vertices;
     uploadJob.resourceDestination = &m_resource;
-    uploadJob.sizeDataInBytes = strideInBytes;
+    uploadJob.sizeDataInBytes = verticesSizeInBytes;
+    std::cout << "Start Uploading Vertex Buffer !" << std::endl;
     uploadJob.onUploadEnd = [&]() {
         m_view.BufferLocation = m_resource->GetGPUVirtualAddress();
+        m_ready = true;
+        std::cout << "Vertex Buffer Ready !" << std::endl;
         };
     uploadBuffer->Upload(uploadJob);
+}
+
+void RenewEngine::VertexBuffer::Bind(ID3D12GraphicsCommandList* commandList) {
+    commandList->IASetVertexBuffers(0, 1, &m_view);
+}
+
+bool RenewEngine::VertexBuffer::IsReady()
+{
+    return m_ready;
 }
 
 
