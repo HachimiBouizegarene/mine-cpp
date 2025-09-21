@@ -3,10 +3,63 @@
 #include <chrono>
 #include <thread>
 #include "Models.h"
+#include "Helper.h"
+#include "PSODesc.h"
+#include "PSOManager.h"
 #include <iostream>
+
+#include "Material.h"
+
+
 void RenewEngine::Engine::Run()
 {
 
+	// SCENE
+	PSODesc psoDesc = {};
+
+	psoDesc.VS = std::make_unique<Shader>(L"VertexShader.cso");
+	psoDesc.PS = std::make_unique<Shader>(L"PixelShader.cso");
+
+	psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	psoDesc.numRtv = 1;
+	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	psoDesc.rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+	psoDesc.rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+	psoDesc.samplerDesc = { 1, 0 };
+	psoDesc.primitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	psoDesc.blendDesc.RenderTarget[0].BlendEnable = FALSE;
+	psoDesc.blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
+	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	rootSignatureDesc.NumParameters = 0;
+	rootSignatureDesc.NumStaticSamplers = 0;
+	rootSignatureDesc.pParameters = nullptr;
+	rootSignatureDesc.pStaticSamplers = nullptr;
+
+	ComPtr<ID3DBlob> rootSignatureBlob;
+	ComPtr<ID3DBlob> rootSignatureErrorBlob;
+	ThrowIfFailed(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &rootSignatureBlob, &rootSignatureErrorBlob));
+
+	D3D12_INPUT_ELEMENT_DESC inputElDesc = {};
+	inputElDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	inputElDesc.SemanticName = "POSITION";
+	inputElDesc.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+
+	D3D12_INPUT_ELEMENT_DESC elementsDesc[] = {
+		inputElDesc
+	};
+	psoDesc.layoutDesc.NumElements = 1;
+	psoDesc.layoutDesc.pInputElementDescs = elementsDesc;
+
+	ThrowIfFailed(m_renderer->GetDevice()->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&(psoDesc.rootSignature))));
+
+	std::unique_ptr<IndexBuffer> indexBuffer = std::make_unique<IndexBuffer>(m_uploadBuffer.get(), test_indicies, sizeof(test_indicies));
+	std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(m_uploadBuffer.get(), test_vertices, sizeof(test_vertices), sizeof(VertexPos));
+	
+	m_gameObject = std::make_unique<GameObject>();
+	m_gameObject->SetMesh(std::make_unique<Mesh>(std::move(vertexBuffer), std::move(indexBuffer)));
+	m_gameObject->SetMaterial(std::make_unique<Material>(m_psoManager->GetOrCreatePSO(psoDesc), psoDesc.rootSignature));
 
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	int frames = 0;
@@ -16,13 +69,9 @@ void RenewEngine::Engine::Run()
 		m_window->PeekMessages();
 		ID3D12GraphicsCommandList *commandListPtr =  m_renderer->BeginFrame();
 
-		if (m_vertexBuffer->IsReady() && m_indexBuffer->IsReady())
+		if (m_gameObject->IsReady())
 		{
-			m_vertexBuffer->Bind(commandListPtr);
-			m_indexBuffer->Bind(commandListPtr);
-			m_pso->Bind(commandListPtr);
-			commandListPtr->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			commandListPtr->DrawInstanced(3, 1, 0, 0);
+			m_gameObject->Render(commandListPtr);
 		}
 		
 		m_renderer->EndFrame();
@@ -37,6 +86,7 @@ void RenewEngine::Engine::Run()
 			lastTime = now;
 		}
 	} 
+	m_renderer->WaitForGpu();
 }
 
 
@@ -52,12 +102,7 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 	m_renderer->EnableDebugLayer();
 	m_renderer->Init(m_window->GetHwnd(), width, height);
 	m_uploadBuffer = std::make_unique<UploadBuffer>(m_renderer->GetDevice(), m_jobSystem.get());
+	m_psoManager = std::make_unique<PSOManager>(m_renderer->GetDevice());
 
-
-	// TEMPORARY
-	m_indexBuffer = std::make_unique<IndexBuffer>(m_uploadBuffer.get(), test_indicies, sizeof(test_indicies));
-	m_vertexBuffer = std::make_unique<VertexBuffer>(m_uploadBuffer.get(), test_vertices, sizeof(test_vertices), sizeof(VertexPos));
-	m_pso = std::make_unique<RenewEngine::PSO>(m_renderer->GetDevice(), L"VertexShader.cso", L"PixelShader.cso");
-	// ---------------- END TEMPORARY
 
 }

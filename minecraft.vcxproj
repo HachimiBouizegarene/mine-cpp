@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Hachimi\Documents\CPP\LIBS\boost_1_89_0;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -91,6 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Hachimi\Documents\CPP\LIBS\boost_1_89_0;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Hachimi\Documents\CPP\LIBS\boost_1_89_0;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -119,6 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Hachimi\Documents\CPP\LIBS\boost_1_89_0;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,32 +131,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="JobSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="PixelShader.cpp" />
-    <ClCompile Include="PSO.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="PSOManager.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="UploadBuffer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
-    <ClCompile Include="VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="IResource.h" />
     <ClInclude Include="JobSystem.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Models.h" />
-    <ClInclude Include="PixelShader.h" />
-    <ClInclude Include="PSO.h" />
+    <ClInclude Include="PSOManager.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="PSODesc.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenewEngine.h" />
     <ClInclude Include="RenewWindow.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">

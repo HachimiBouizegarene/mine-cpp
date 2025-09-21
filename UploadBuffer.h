@@ -13,7 +13,7 @@ namespace RenewEngine {
 	struct UploadJob
 	{
 		ComPtr<ID3D12Resource>* resourceDestination = nullptr;
-		void* dataPtr;
+		void* dataPtr = nullptr;
 		size_t sizeDataInBytes = 0;
 		std::atomic<bool>* readyPtr = nullptr;
 		std::function<void()> onUploadEnd = nullptr;

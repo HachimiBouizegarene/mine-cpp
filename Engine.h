@@ -7,8 +7,9 @@
 #include "Renderer.h"
 #include "IndexBuffer.h"
 #include "UploadBuffer.h"
-#include "PSO.h"
+#include "PSOManager.h"
 #include <iostream>
+#include "GameObject.h"
 namespace RenewEngine {
 	class Engine
 	{
@@ -20,11 +21,10 @@ namespace RenewEngine {
 		std::unique_ptr<Renderer> m_renderer;
 		std::unique_ptr<JobSystem> m_jobSystem;
 		std::unique_ptr<UploadBuffer> m_uploadBuffer;
-		std::unique_ptr<PSO> m_pso;
+		std::unique_ptr<PSOManager> m_psoManager;
 		//Temporary
 	private:
-		std::unique_ptr<VertexBuffer> m_vertexBuffer = nullptr;
-		std::unique_ptr<IndexBuffer> m_indexBuffer = nullptr;
+		std::unique_ptr<GameObject> m_gameObject = nullptr;
 	};
 }
 

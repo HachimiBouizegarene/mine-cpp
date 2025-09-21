@@ -15,7 +15,7 @@ static VertexPos test_vertices[3] = {
 
 };
 
-static uint16_t test_indicies[3] =
+static UINT test_indicies[3] =
 {
     0, 1, 2
 };

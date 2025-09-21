@@ -3,22 +3,23 @@
 #include <wrl.h>
 #include <memory>
 #include "UploadBuffer.h"
-
+#include "IResource.h"
 using namespace Microsoft::WRL;
 namespace RenewEngine {
-	class IndexBuffer {
+	class IndexBuffer  : public IResource{
 
 	public:
-		IndexBuffer(UploadBuffer* uploadBuffer, void* vertices, unsigned int verticesSizeInBytes);
-		bool IsReady();
-		D3D12_INDEX_BUFFER_VIEW& GetView();
-		void Bind(ID3D12GraphicsCommandList *commandList);
+		IndexBuffer(UploadBuffer* uploadBuffer, UINT indices[], UINT indicesSizeInBytes);
+		D3D12_INDEX_BUFFER_VIEW* GetViewPtr();
+		void Bind(ID3D12GraphicsCommandList *commandList) override;
 
+	public:
+		inline UINT GetNumIndices() { return m_numIndices; };
 
 	private:
 		D3D12_INDEX_BUFFER_VIEW m_view = {};
 		UploadBuffer* m_uploadBuffer;
 		ComPtr<ID3D12Resource> m_resource;
-		std::atomic<bool> m_ready = false;
+		UINT m_numIndices;
 	};
 }

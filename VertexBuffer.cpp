@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-RenewEngine::VertexBuffer::VertexBuffer(UploadBuffer* uploadBuffer, void* vertices, unsigned int verticesSizeInBytes, UINT strideInBytes) : m_uploadBuffer(uploadBuffer)
+RenewEngine::VertexBuffer::VertexBuffer(UploadBuffer* uploadBuffer, void* vertices, UINT verticesSizeInBytes, UINT strideInBytes) : m_uploadBuffer(uploadBuffer) , m_numVertices(verticesSizeInBytes / strideInBytes)
 {
     m_view.SizeInBytes = verticesSizeInBytes;
     m_view.StrideInBytes = strideInBytes;
@@ -15,24 +15,19 @@ RenewEngine::VertexBuffer::VertexBuffer(UploadBuffer* uploadBuffer, void* vertic
     std::cout << "Start Uploading Vertex Buffer !" << std::endl;
     uploadJob.onUploadEnd = [&]() {
         m_view.BufferLocation = m_resource->GetGPUVirtualAddress();
-        m_ready = true;
+        MarkReady();
         std::cout << "Vertex Buffer Ready !" << std::endl;
         };
     uploadBuffer->Upload(uploadJob);
+
 }
 
 void RenewEngine::VertexBuffer::Bind(ID3D12GraphicsCommandList* commandList) {
     commandList->IASetVertexBuffers(0, 1, &m_view);
 }
 
-bool RenewEngine::VertexBuffer::IsReady()
+
+D3D12_VERTEX_BUFFER_VIEW* RenewEngine::VertexBuffer::GetViewPtr()
 {
-    return m_ready;
-}
-
-
-
-D3D12_VERTEX_BUFFER_VIEW& RenewEngine::VertexBuffer::GetView()
-{
-    return m_view;
+    return &m_view;
 }
