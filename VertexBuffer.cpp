@@ -8,17 +8,15 @@ RenewEngine::VertexBuffer::VertexBuffer(UploadBuffer* uploadBuffer, void* vertic
     m_view.StrideInBytes = strideInBytes;
     //m_view.BufferLocation = m_resource->GetGPUVirtualAddress();
     
-    UploadJob uploadJob;
+    UBJob uploadJob;
     uploadJob.dataPtr = vertices;
     uploadJob.resourceDestination = &m_resource;
     uploadJob.sizeDataInBytes = verticesSizeInBytes;
-    std::cout << "Start Uploading Vertex Buffer !" << std::endl;
     uploadJob.onUploadEnd = [&]() {
         m_view.BufferLocation = m_resource->GetGPUVirtualAddress();
         MarkReady();
-        std::cout << "Vertex Buffer Ready !" << std::endl;
         };
-    uploadBuffer->Upload(uploadJob);
+    uploadBuffer->RegisterJob(uploadJob);
 
 }
 

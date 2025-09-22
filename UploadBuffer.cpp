@@ -47,20 +47,22 @@ RenewEngine::UploadBuffer::~UploadBuffer()
 }
 
 
+
 void RenewEngine::UploadBuffer::ThreadLoop()
 {
 	while (true)
 	{
-		UploadJob job;
+		UBJob job;
 		UploadCommandSlot* commandSlot;
 		{
 			std::unique_lock<std::mutex> lock(m_mutex);
 			m_cvUploadJobs.wait(lock, [this]() {
-				return m_uploadJobs.size() > 0 || m_shouldQuit;
+				return m_jobs.size() > 0 || m_shouldQuit;
 				});
 			if (m_shouldQuit) return;
-			job = m_uploadJobs.front();
-			m_uploadJobs.pop();
+			job = m_jobs.front();
+			m_jobs.pop();
+	
 			m_cvFreeCommandSlot.wait(lock, [this]() {
 				return m_freeCommandSlots.size() > 0 || m_shouldQuit;
 				});
@@ -128,14 +130,15 @@ void RenewEngine::UploadBuffer::ThreadLoop()
 				job.onUploadEnd();
 			}
 			if (job.readyPtr) *(job.readyPtr) = true;
-			std::cout << "Job IS DONE !" << std::endl;
 		});
 
 	}
 }
 
-void RenewEngine::UploadBuffer::Upload(UploadJob uploadBufferHandle)
+
+
+void RenewEngine::UploadBuffer::RegisterJob(UBJob job)
 {
-	m_uploadJobs.push(uploadBufferHandle);
+	m_jobs.push(job);
 	m_cvUploadJobs.notify_one();
 }

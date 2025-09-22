@@ -31,6 +31,7 @@ namespace RenewEngine
 	{
 	public:
 		GameObject() = default;
+		void Bind(ID3D12GraphicsCommandList* commandListPtr);
 		void Render(ID3D12GraphicsCommandList* commandListPtr);
 		void SetMesh(std::unique_ptr<Mesh> mesh);
 		void SetMaterial(std::unique_ptr<Material> material);

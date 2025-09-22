@@ -1,5 +1,5 @@
 #include "GameObject.h"
-
+#include <iostream>
 RenewEngine::Mesh::Mesh(std::unique_ptr<VertexBuffer> vertexBuffer, std::unique_ptr<IndexBuffer> indexBuffer) : 
 	m_vertexBuffer(std::move(vertexBuffer)), m_indexBuffer(std::move(indexBuffer))
 {
@@ -22,10 +22,17 @@ bool RenewEngine::Mesh::IsReady()
 
 void RenewEngine::GameObject::Render(ID3D12GraphicsCommandList* commandListPtr)
 {
-	commandListPtr->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_material->Bind(commandListPtr);
+
 	m_mesh->Draw(commandListPtr);
 }
+
+void RenewEngine::GameObject::Bind(ID3D12GraphicsCommandList* commandListPtr)
+{
+	commandListPtr->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_material->Bind(commandListPtr);
+}
+
+
 
 void RenewEngine::GameObject::SetMesh(std::unique_ptr<Mesh> mesh)
 {

@@ -3,15 +3,15 @@
 #include <wrl.h>
 #include <memory>
 #include "UploadBuffer.h"
-#include "IResource.h"
+#include "ResourceBase.h"
 
 using namespace Microsoft::WRL;
  
 namespace RenewEngine {
-	class VertexBuffer : public IResource {	
+	class VertexBuffer : public ResourceBase {
 	public:
 		VertexBuffer(UploadBuffer* uploadBuffer, void* vertices, UINT verticesSizeInBytes, UINT strideInBytes);
-		void Bind(ID3D12GraphicsCommandList* commandList) override;
+		void Bind(ID3D12GraphicsCommandList* commandList);
 		D3D12_VERTEX_BUFFER_VIEW* GetViewPtr();
 		UINT GetNumVertices() { return m_numVertices; };
 

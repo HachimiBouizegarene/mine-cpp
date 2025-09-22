@@ -3,15 +3,15 @@
 #include <wrl.h>
 #include <memory>
 #include "UploadBuffer.h"
-#include "IResource.h"
+#include "ResourceBase.h"
 using namespace Microsoft::WRL;
 namespace RenewEngine {
-	class IndexBuffer  : public IResource{
+	class IndexBuffer  : public ResourceBase{
 
 	public:
 		IndexBuffer(UploadBuffer* uploadBuffer, UINT indices[], UINT indicesSizeInBytes);
 		D3D12_INDEX_BUFFER_VIEW* GetViewPtr();
-		void Bind(ID3D12GraphicsCommandList *commandList) override;
+		void Bind(ID3D12GraphicsCommandList *commandList);
 
 	public:
 		inline UINT GetNumIndices() { return m_numIndices; };

@@ -10,16 +10,14 @@ using namespace Microsoft::WRL;
 namespace RenewEngine {
 
 
-	struct UploadJob
+	struct UBJob
 	{
 		ComPtr<ID3D12Resource>* resourceDestination = nullptr;
 		void* dataPtr = nullptr;
 		size_t sizeDataInBytes = 0;
 		std::atomic<bool>* readyPtr = nullptr;
 		std::function<void()> onUploadEnd = nullptr;
-		ComPtr<ID3D12Resource> uploadResource;
 	};
-
 
 	struct UploadCommandSlot
 	{
@@ -28,13 +26,11 @@ namespace RenewEngine {
 	};
 
 
-	class UploadBuffer
-	{
+	class UploadBuffer {
 	public :
 		UploadBuffer(ID3D12Device* device, JobSystem* jobSystem) ;
 		~UploadBuffer();
-		void Upload(UploadJob uploadBufferHandle);
-		
+		void RegisterJob(UBJob uploadjob);
 	private:
 		void ThreadLoop();
 		void Stop();
@@ -55,7 +51,7 @@ namespace RenewEngine {
 
 		std::thread m_thread;
 
-		std::queue<UploadJob> m_uploadJobs;
+		std::queue<UBJob> m_jobs;
 		std::queue<UploadCommandSlot*> m_freeCommandSlots;
 
 		std::condition_variable m_cvFreeCommandSlot;

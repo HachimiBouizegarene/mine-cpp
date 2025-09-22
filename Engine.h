@@ -7,9 +7,11 @@
 #include "Renderer.h"
 #include "IndexBuffer.h"
 #include "UploadBuffer.h"
+#include "Camera.h"
 #include "PSOManager.h"
 #include <iostream>
 #include "GameObject.h"
+#include "ConstantBuffer.h"
 namespace RenewEngine {
 	class Engine
 	{
@@ -24,7 +26,9 @@ namespace RenewEngine {
 		std::unique_ptr<PSOManager> m_psoManager;
 		//Temporary
 	private:
-		std::unique_ptr<GameObject> m_gameObject = nullptr;
+		std::unique_ptr<Camera> m_camera;
+		std::unique_ptr<GameObject> m_gameObject;
+		std::unique_ptr<ConstantBuffer> m_cbCamera;
 	};
 }
 
