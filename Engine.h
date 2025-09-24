@@ -5,6 +5,7 @@
 #include "VertexBuffer.h"
 #include "JobSystem.h"
 #include "Renderer.h"
+#include "Level.h"
 #include "IndexBuffer.h"
 #include "UploadBuffer.h"
 #include "Camera.h"
@@ -30,6 +31,7 @@ namespace RenewEngine {
 		std::unique_ptr<Camera> m_camera;
 		std::unique_ptr<GameObject> m_gameObject;
 		std::unique_ptr<ConstantBuffer> m_cbCamera;
+		std::unique_ptr<Level> m_level;
 		std::unique_ptr<DX12Context> m_dx12Context;
 	};
 }

@@ -152,9 +152,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="DX12Context.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="IComponent.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="IndexBuffer.h" />

@@ -61,6 +61,12 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 
 
 	//Temporart Scene
+
+	m_level = std::make_unique<Level>();
+	std::unique_ptr cameraObj
+	m_level->AddObject()
+
+
 	m_camera = std::make_unique<Camera>(XMFLOAT3(0.0f, 0.0f, 10.0f), 3.14 / 2, static_cast<float>(width) / height);
 	m_cbCamera = std::make_unique<ConstantBuffer>(m_dx12Context->GetDevice(), ConstantBuffer::Type::Camera);
 
@@ -89,4 +95,7 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 
 	m_gameObject->SetMaterial(std::make_unique<Material>(m_psoManager.get(), m_dx12Context->GetDevice(),
 		L"VertexShader.cso", L"PixelShader.cso", inputLayoutDesc, rootParams, PSODesc::CullMode::None));
+
+
+	Run();
 }

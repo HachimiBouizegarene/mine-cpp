@@ -4,5 +4,4 @@ int main()
 {
 	HINSTANCE hInstance = GetModuleHandleW(NULL);
 	RenewEngine::Engine engine(hInstance);
-	engine.Run();
 }
