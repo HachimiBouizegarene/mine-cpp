@@ -11,6 +11,7 @@
 #include "PSOManager.h"
 #include <iostream>
 #include "GameObject.h"
+#include "DX12Context.h"
 #include "ConstantBuffer.h"
 namespace RenewEngine {
 	class Engine
@@ -29,6 +30,7 @@ namespace RenewEngine {
 		std::unique_ptr<Camera> m_camera;
 		std::unique_ptr<GameObject> m_gameObject;
 		std::unique_ptr<ConstantBuffer> m_cbCamera;
+		std::unique_ptr<DX12Context> m_dx12Context;
 	};
 }
 

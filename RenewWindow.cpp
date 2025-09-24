@@ -1,8 +1,8 @@
 #include "RenewWindow.h"
 #include "Helper.h"
 #include <exception>
-
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+#include "Input.h"
+static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -24,6 +24,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case VK_ESCAPE:
 			PostQuitMessage(0);
 			return 0;
+		case 'W':
+			RenewEngine::Input::SetKeyDown(RenewEngine::Input::KeyboardKey::W);
+			break;
+		case 'S':
+			RenewEngine::Input::SetKeyDown(RenewEngine::Input::KeyboardKey::S);
+			break;
+		case 'A':
+			RenewEngine::Input::SetKeyDown(RenewEngine::Input::KeyboardKey::A);
+			break;
+		case 'D':
+			RenewEngine::Input::SetKeyDown(RenewEngine::Input::KeyboardKey::D);
+			break;
 		}
 	}
 

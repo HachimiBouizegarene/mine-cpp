@@ -28,13 +28,27 @@ ID3D12PipelineState* RenewEngine::PSOManager::GetOrCreatePSO(const PSODesc& desc
 	for (UINT i = 0; i < desc.numRtv; i++) {
 		psoDesc.RTVFormats[i] = desc.RTVFormats[i];
 	}
-	psoDesc.RasterizerState = desc.rasterizerDesc;
+	switch (desc.cullMode)
+	{
+	case PSODesc::CullMode::Back:
+		psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+		break;
+	case PSODesc::CullMode::Front:
+		psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
+		break;
+	case PSODesc::CullMode::None:
+		psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+		break;
+	}
+	psoDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+	psoDesc.RasterizerState.DepthClipEnable = FALSE;
 	psoDesc.SampleDesc = desc.samplerDesc;
 	psoDesc.BlendState = desc.blendDesc;
 	psoDesc.InputLayout = desc.layoutDesc;
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.CachedPSO.pCachedBlob = nullptr;
 	psoDesc.CachedPSO.CachedBlobSizeInBytes = 0;
+	psoDesc.SampleDesc = { 1, 0 };
 	ComPtr<ID3D12PipelineState> pso;
 	ThrowIfFailed(m_devicePtr->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso)));
 	m_chachedPSOs.push_back(pso);

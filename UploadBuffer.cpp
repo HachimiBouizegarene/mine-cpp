@@ -105,7 +105,6 @@ void RenewEngine::UploadBuffer::ThreadLoop()
 		m_commandQueue->ExecuteCommandLists(1, commandLists);
 		ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), m_fenceValue));
 
-		//std::cout << "Uploaded Resource CPU Done" << std::endl;
 
 		std::shared_ptr<JobState> jobState = m_jobSystem->RegisterJob([this, job,commandSlot, uploadResource]() {
 			bool shouldWait = false;

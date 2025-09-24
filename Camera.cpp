@@ -14,6 +14,5 @@ void RenewEngine::Camera::SetPosition(const XMFLOAT3& pos)
 
 void RenewEngine::Camera::UpdatePosition(const float& x, const float& y, const float& z) {
 	Object::UpdatePosition(x, y, z);
-	std::cout << m_pos.z << std::endl;
 	m_data.view = XMMatrixTranspose(XMMatrixTranslation(m_pos.x, m_pos.y, m_pos.z));
 }

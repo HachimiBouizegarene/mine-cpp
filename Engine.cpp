@@ -13,7 +13,6 @@
 
 void RenewEngine::Engine::Run()
 {
-
 	// SCENE
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	int frames = 0;
@@ -55,48 +54,15 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 	m_jobSystem = std::make_unique<JobSystem>();
 	m_window = std::make_unique<RenewWindow>(hInstance, L"minecraft", width, height);
 	m_window->Show();
-	m_renderer = std::make_unique<Renderer>();
-	m_renderer->EnableDebugLayer();
-	m_renderer->Init(m_window->GetHwnd(), width, height);
-	m_uploadBuffer = std::make_unique<UploadBuffer>(m_renderer->GetDevice(), m_jobSystem.get());
-	m_psoManager = std::make_unique<PSOManager>(m_renderer->GetDevice());
+	m_dx12Context = std::make_unique<DX12Context>(m_window->GetHwnd(), width, height, 2, true);
+	m_renderer = std::make_unique<Renderer>(m_window->GetHwnd(), width, height, m_dx12Context.get());
+	m_uploadBuffer = std::make_unique<UploadBuffer>(m_dx12Context->GetDevice(), m_jobSystem.get());
+	m_psoManager = std::make_unique<PSOManager>(m_dx12Context->GetDevice());
 
 
 	//Temporart Scene
 	m_camera = std::make_unique<Camera>(XMFLOAT3(0.0f, 0.0f, 10.0f), 3.14 / 2, static_cast<float>(width) / height);
-	m_cbCamera = std::make_unique<ConstantBuffer>(m_renderer->GetDevice(), ConstantBuffer::Type::Camera);
-	PSODesc psoDesc = {};
-
-	psoDesc.VS = std::make_unique<Shader>(L"VertexShader.cso");
-	psoDesc.PS = std::make_unique<Shader>(L"PixelShader.cso");
-
-	psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	psoDesc.numRtv = 1;
-	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-	psoDesc.rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
-	psoDesc.rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
-	psoDesc.samplerDesc = { 1, 0 };
-	psoDesc.primitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	psoDesc.blendDesc.RenderTarget[0].BlendEnable = FALSE;
-	psoDesc.blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-
-	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
-	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-	rootSignatureDesc.NumParameters = 1;
-	rootSignatureDesc.NumStaticSamplers = 0;
-
-	D3D12_ROOT_PARAMETER rootParameters[1] = {};
-	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameters[0].Descriptor.ShaderRegister = 0;
-	rootParameters[0].Descriptor.RegisterSpace = 0;
-	rootSignatureDesc.pParameters = rootParameters;
-
-	rootSignatureDesc.pStaticSamplers = nullptr;
-
-	ComPtr<ID3DBlob> rootSignatureBlob;
-	ComPtr<ID3DBlob> rootSignatureErrorBlob;
-	ThrowIfFailed(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &rootSignatureBlob, &rootSignatureErrorBlob));
+	m_cbCamera = std::make_unique<ConstantBuffer>(m_dx12Context->GetDevice(), ConstantBuffer::Type::Camera);
 
 	D3D12_INPUT_ELEMENT_DESC inputElDesc = {};
 	inputElDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -106,15 +72,21 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 	D3D12_INPUT_ELEMENT_DESC elementsDesc[] = {
 		inputElDesc
 	};
-	psoDesc.layoutDesc.NumElements = 1;
-	psoDesc.layoutDesc.pInputElementDescs = elementsDesc;
-
-	ThrowIfFailed(m_renderer->GetDevice()->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&(psoDesc.rootSignature))));
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
+	inputLayoutDesc.NumElements = 1;
+	inputLayoutDesc.pInputElementDescs = elementsDesc;
 
 	std::unique_ptr<IndexBuffer> indexBuffer = std::make_unique<IndexBuffer>(m_uploadBuffer.get(), test_indicies, sizeof(test_indicies));
 	std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(m_uploadBuffer.get(), test_vertices, sizeof(test_vertices), sizeof(VertexPos));
 
 	m_gameObject = std::make_unique<GameObject>();
 	m_gameObject->SetMesh(std::make_unique<Mesh>(std::move(vertexBuffer), std::move(indexBuffer)));
-	m_gameObject->SetMaterial(std::make_unique<Material>(m_psoManager->GetOrCreatePSO(psoDesc), psoDesc.rootSignature));
+	std::vector<Material::RootParameter> rootParams;
+	Material::RootParameter rootParam1 = {};
+	rootParam1.ShaderRegister = 0;
+	rootParam1.type = Material::RootParameter::Type::CBV;
+	rootParams.push_back(rootParam1);
+
+	m_gameObject->SetMaterial(std::make_unique<Material>(m_psoManager.get(), m_dx12Context->GetDevice(),
+		L"VertexShader.cso", L"PixelShader.cso", inputLayoutDesc, rootParams, PSODesc::CullMode::None));
 }

@@ -1,7 +1,7 @@
 #include "Shader.h"
 #include <d3dcompiler.h>
 #include "Helper.h"
-RenewEngine::Shader::Shader(LPCWSTR filenameCSO)
+RenewEngine::Shader::Shader(LPCWSTR filenameCSO) 
 {
 	ThrowIfFailed(D3DReadFileToBlob(filenameCSO, &m_blob));
 }
@@ -9,3 +9,4 @@ RenewEngine::Shader::Shader(LPCWSTR filenameCSO)
 ID3DBlob* RenewEngine::Shader::Shader::GetBlob() {
 	return m_blob.Get();
 }
+

@@ -133,8 +133,10 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
+    <ClCompile Include="DX12Context.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameWindow.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="RenewWindow.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="JobSystem.cpp" />
     <ClCompile Include="main.cpp" />
@@ -146,14 +148,17 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="UploadBuffer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="DX12Context.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="JobSystem.h" />
@@ -167,6 +172,7 @@
     <ClInclude Include="RenewWindow.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">

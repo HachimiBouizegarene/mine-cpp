@@ -1,6 +1,7 @@
 #pragma once
 #include <wrl.h>
 #include "Shader.h"
+#include "VertexShader.h"
 #include <d3d12.h>
 #include <memory>
 
@@ -10,7 +11,13 @@ namespace RenewEngine
 {
 	struct PSODesc
 	{
-		std::unique_ptr<Shader> VS;
+		enum class CullMode
+		{
+			Back, Front, None
+		};
+
+
+		std::unique_ptr<VertexShader> VS;
 		std::unique_ptr<Shader> PS;
 		D3D12_INPUT_LAYOUT_DESC layoutDesc;
 		ComPtr<ID3D12RootSignature> rootSignature;
@@ -18,7 +25,7 @@ namespace RenewEngine
 		DXGI_FORMAT DSVFormat;
 		DXGI_FORMAT RTVFormats[8];
 		UINT numRtv;
-		D3D12_RASTERIZER_DESC rasterizerDesc;
+		CullMode cullMode;
 		DXGI_SAMPLE_DESC samplerDesc;
 		D3D12_BLEND_DESC blendDesc;
 	};

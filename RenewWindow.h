@@ -1,6 +1,9 @@
 #pragma once
 #include <windows.h>
 
+
+
+
 namespace RenewEngine {
 	class RenewWindow
 	{

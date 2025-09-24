@@ -34,13 +34,16 @@
     <Filter Include="RenewEngine\Header Files\Engine">
       <UniqueIdentifier>{c8e76190-bb6f-42ba-be83-b99d27335d24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenewEngine\Header Files\Factories">
+      <UniqueIdentifier>{a9bd016d-0006-472c-abbd-f114aaa6d2b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine.cpp">
       <Filter>RenewEngine\Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="GameWindow.cpp">
+    <ClCompile Include="RenewWindow.cpp">
       <Filter>RenewEngine\Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
@@ -78,6 +81,15 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>RenewEngine\Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>RenewEngine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DX12Context.cpp">
+      <Filter>RenewEngine\Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>RenewEngine\Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +148,15 @@
       <Filter>RenewEngine\Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
+      <Filter>RenewEngine\Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShader.h">
+      <Filter>RenewEngine\Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="DX12Context.h">
+      <Filter>RenewEngine\Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
       <Filter>RenewEngine\Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>

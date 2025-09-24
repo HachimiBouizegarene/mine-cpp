@@ -13,8 +13,9 @@ namespace RenewEngine {
 	{
 	public:
 		Shader(LPCWSTR filenameCSO);
+		
 		ID3DBlob* GetBlob();
-	private:
+	protected:
 		ComPtr<ID3DBlob> m_blob;
 	};
 }
