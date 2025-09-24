@@ -1,7 +1,7 @@
 #include "Object.h"
 #include <iostream>
 
-RenewEngine::Object::Object(const XMFLOAT3& pos) : m_pos(pos)
+RenewEngine::Object::Object(XMFLOAT3 pos) : m_pos(pos)
 {
 
 }

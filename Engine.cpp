@@ -4,6 +4,7 @@
 #include <thread>
 #include "Models.h"
 #include "Helper.h"
+#include "CameraComponent.h"
 #include "PSODesc.h"
 #include "PSOManager.h"
 #include <iostream>
@@ -63,8 +64,10 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 	//Temporart Scene
 
 	m_level = std::make_unique<Level>();
-	std::unique_ptr cameraObj
-	m_level->AddObject()
+	std::unique_ptr<Object> cameraObj = std::make_unique<Object>();
+	cameraObj->AddComponent(std::make_unique<CameraComponent>());
+	m_level->AddObject(std::move(cameraObj));
+
 
 
 	m_camera = std::make_unique<Camera>(XMFLOAT3(0.0f, 0.0f, 10.0f), 3.14 / 2, static_cast<float>(width) / height);

@@ -11,6 +11,13 @@ namespace RenewEngine
 			m_objects.push_back(std::move(o));
 		};
 
+		void Update() {
+			for (std::unique_ptr<Object>& o : m_objects)
+			{
+				o->Update();
+			}
+		};
+
 	private:
 		std::vector<std::unique_ptr<Object>> m_objects;
 	};
