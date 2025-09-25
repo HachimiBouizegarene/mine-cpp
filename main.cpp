@@ -1,7 +1,7 @@
 #include <iostream>
 #include "RenewEngine.h"
+using namespace RenewEnginePublic;
 int main()
 {
-	HINSTANCE hInstance = GetModuleHandleW(NULL);
-	RenewEngine::Engine engine(hInstance);
+	std::unique_ptr<Engine> engine = CreateRenewEngine();
 }

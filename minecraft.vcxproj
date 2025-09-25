@@ -162,6 +162,9 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="PEngine.h" />
+    <ClInclude Include="PLevel.h" />
+    <ClInclude Include="PObject.h" />
     <ClInclude Include="ResourceBase.h" />
     <ClInclude Include="JobSystem.h" />
     <ClInclude Include="Material.h" />

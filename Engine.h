@@ -14,12 +14,13 @@
 #include "GameObject.h"
 #include "DX12Context.h"
 #include "ConstantBuffer.h"
+#include "PEngine.h"
 namespace RenewEngine {
-	class Engine
+	class Engine : public RenewEnginePublic::Engine
 	{
 	public:
 		Engine(HINSTANCE hInstance);
-		void Run();
+		void Run() override;
 	private:
 		std::unique_ptr<RenewWindow> m_window;
 		std::unique_ptr<Renderer> m_renderer;

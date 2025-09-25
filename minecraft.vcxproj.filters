@@ -37,6 +37,9 @@
     <Filter Include="RenewEngine\Header Files\Factories">
       <UniqueIdentifier>{a9bd016d-0006-472c-abbd-f114aaa6d2b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenewEngine\Public">
+      <UniqueIdentifier>{4db67c7d-3b02-49d2-a48e-e51eac4da246}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -102,9 +105,6 @@
     <ClInclude Include="Engine.h">
       <Filter>RenewEngine\Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="RenewEngine.h">
-      <Filter>RenewEngine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>RenewEngine\Header Files\Core</Filter>
     </ClInclude>
@@ -158,6 +158,24 @@
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>RenewEngine\Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>RenewEngine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IComponent.h">
+      <Filter>RenewEngine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PLevel.h">
+      <Filter>RenewEngine\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="PObject.h">
+      <Filter>RenewEngine\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="PEngine.h">
+      <Filter>RenewEngine\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="RenewEngine.h">
+      <Filter>RenewEngine\Public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

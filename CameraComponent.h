@@ -9,8 +9,15 @@ namespace RenewEngine
 		CameraComponent() : IComponent(IComponent::Type::Camera){
 			
 		};
-		void Update() override {
+		void Update(ID3D12GraphicsCommandList * commandList) override {
 			
+
+
 		};
+
+		static const Type GetStaticType() 
+		{
+			return Type::Camera;
+		}
 	};
 }

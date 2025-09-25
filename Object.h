@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include "IComponent.h"
-
+#include <d3d12.h>
 #include "PObject.h"
 using namespace DirectX;
 
@@ -28,12 +28,13 @@ namespace RenewEngine
 			static_assert(std::is_base_of<IComponent, T>::value, L"T hase to be base of IComponent");
 			for (std::unique_ptr<IComponent>& comp : m_components)
 			{
-				if (comp->GetType() == type)
+				if (comp->GetType() == T::GetStaticType())
 				{
 					return comp.get();
 				}
 			}
 		};
+		
 		void AddComponent(std::unique_ptr<IComponent> component) {
 			m_components.push_back(std::move(component));
 		}

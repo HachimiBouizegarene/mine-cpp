@@ -7,6 +7,6 @@ namespace RenewEnginePublic
 	{
 	public :
 		virtual ~Level() = default;
-		virtual void 
+
 	};
 }

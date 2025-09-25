@@ -8,9 +8,16 @@
 #include "PSODesc.h"
 #include "PSOManager.h"
 #include <iostream>
-
+#include "PEngine.h"
 #include "Material.h"
 
+
+
+std::unique_ptr<RenewEnginePublic::Engine> RenewEnginePublic::CreateRenewEngine()
+{
+	HINSTANCE hInstance = GetModuleHandleA(NULL);
+	return std::make_unique<RenewEngine::Engine>(hInstance);
+}
 
 void RenewEngine::Engine::Run()
 {
@@ -68,8 +75,6 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 	cameraObj->AddComponent(std::make_unique<CameraComponent>());
 	m_level->AddObject(std::move(cameraObj));
 
-
-
 	m_camera = std::make_unique<Camera>(XMFLOAT3(0.0f, 0.0f, 10.0f), 3.14 / 2, static_cast<float>(width) / height);
 	m_cbCamera = std::make_unique<ConstantBuffer>(m_dx12Context->GetDevice(), ConstantBuffer::Type::Camera);
 
@@ -100,5 +105,4 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 		L"VertexShader.cso", L"PixelShader.cso", inputLayoutDesc, rootParams, PSODesc::CullMode::None));
 
 
-	Run();
 }

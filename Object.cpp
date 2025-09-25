@@ -6,7 +6,7 @@ RenewEngine::Object::Object(XMFLOAT3 pos) : m_pos(pos)
 
 }
 
-void RenewEngine::Object::SetPosition(const XMFLOAT3& pos)
+void RenewEngine::Object::SetPosition(const XMFLOAT3& pos) 
 {
 	m_pos = pos;
 }
