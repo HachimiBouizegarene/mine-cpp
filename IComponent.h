@@ -1,8 +1,10 @@
 #pragma once
 
 #include <d3d12.h>
+#include "PComponent.h"
+
 namespace RenewEngine {
-	class IComponent {
+	class IComponent : public RenewEnginePublic::Component { 
 	public:
 		enum class Type {
 			None, Camera

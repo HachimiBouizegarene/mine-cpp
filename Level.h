@@ -2,17 +2,15 @@
 #include <vector>
 #include <memory>
 #include "Object.h"
-
+#include "PObject.h"
 #include "PLevel.h"
 
 namespace RenewEngine
 {
-	class Level : RenewEnginePublic::Level {
+	class Level : public RenewEnginePublic::Level {
 
 	public:
-		void AddObject(std::unique_ptr<Object> o) {
-			m_objects.push_back(std::move(o));
-		};
+		RenewEnginePublic::Object* AddObject(std::unique_ptr<RenewEnginePublic::Object> o) override;
 
 		void Update(ID3D12GraphicsCommandList * commandList) {
 			for (std::unique_ptr<Object>& o : m_objects)

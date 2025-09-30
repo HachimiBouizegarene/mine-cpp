@@ -8,8 +8,6 @@ using namespace Microsoft::WRL;
 namespace RenewEngine
 {
 	
-
-
 	class ConstantBuffer
 	{
 

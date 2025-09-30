@@ -10,7 +10,7 @@
 #include <iostream>
 #include "PEngine.h"
 #include "Material.h"
-
+#include <stdexcept>
 
 
 std::unique_ptr<RenewEnginePublic::Engine> RenewEnginePublic::CreateRenewEngine()
@@ -51,6 +51,15 @@ void RenewEngine::Engine::Run()
 		}
 	} 
 	m_renderer->WaitForGpu();
+}
+
+RenewEnginePublic::Level* RenewEngine::Engine::AddLevel(std::unique_ptr<RenewEnginePublic::Level> level)
+{
+	Level* cast = dynamic_cast<Level*>(level.release());
+	if (!cast) throw std::runtime_error("Invalid Level type passed to the Engine");
+	std::unique_ptr<Level> uPtrCast(cast) ;
+	m_levels.push_back(std::move(uPtrCast));
+	return cast;
 }
 
 

@@ -4,7 +4,11 @@ RenewEngine::UploadBuffer::UploadBuffer(ID3D12Device* device, JobSystem* jobSyst
 {
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc = {};
 	commandQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_COPY;
+
 	
+	
+
+
 	ThrowIfFailed(device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&m_commandQueue)));
 	
 	m_commandSlots.reserve(m_numCommandSlots);

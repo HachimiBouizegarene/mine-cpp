@@ -15,12 +15,15 @@
 #include "DX12Context.h"
 #include "ConstantBuffer.h"
 #include "PEngine.h"
+#include "PLevel.h"
 namespace RenewEngine {
 	class Engine : public RenewEnginePublic::Engine
 	{
 	public:
 		Engine(HINSTANCE hInstance);
 		void Run() override;
+		RenewEnginePublic::Level* AddLevel(std::unique_ptr<RenewEnginePublic::Level> level) override;
+
 	private:
 		std::unique_ptr<RenewWindow> m_window;
 		std::unique_ptr<Renderer> m_renderer;
@@ -28,12 +31,13 @@ namespace RenewEngine {
 		std::unique_ptr<UploadBuffer> m_uploadBuffer;
 		std::unique_ptr<PSOManager> m_psoManager;
 		//Temporary
-	private:
 		std::unique_ptr<Camera> m_camera;
 		std::unique_ptr<GameObject> m_gameObject;
 		std::unique_ptr<ConstantBuffer> m_cbCamera;
 		std::unique_ptr<Level> m_level;
 		std::unique_ptr<DX12Context> m_dx12Context;
+
+		std::vector<std::unique_ptr<Level>> m_levels;
 	};
 }
 

@@ -38,6 +38,10 @@ namespace RenewEngine
 		void AddComponent(std::unique_ptr<IComponent> component) {
 			m_components.push_back(std::move(component));
 		}
+		
+	protected:
+		std::vector<std::unique_ptr<RenewEnginePublic::Component>>& GetAllComponents() override { return m_components; };
+
 	protected:
 		XMFLOAT3 m_pos;
 		std::vector<std::unique_ptr<IComponent>> m_components;

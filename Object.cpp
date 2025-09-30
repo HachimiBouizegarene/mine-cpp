@@ -15,3 +15,10 @@ void RenewEngine::Object::UpdatePosition(const float& x, const float& y, const f
 {
 	m_pos = XMFLOAT3(m_pos.x +  x, m_pos.y + y, m_pos.z + z);
 }
+
+
+
+std::unique_ptr<RenewEnginePublic::Object> RenewEnginePublic::CreateObject()
+{
+	return std::unique_ptr<RenewEngine::Object>();
+}
