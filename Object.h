@@ -22,25 +22,33 @@ namespace RenewEngine
 			}
 		};
 
-
-		template<typename T>
-		IComponent* GetComponent() {
-			static_assert(std::is_base_of<IComponent, T>::value, L"T hase to be base of IComponent");
-			for (std::unique_ptr<IComponent>& comp : m_components)
+		RenewEnginePublic::Component* GetComponent(RenewEnginePublic::Component::Type t) override {
+			for (std::unique_ptr<IComponent>& c : m_components)
 			{
-				if (comp->GetType() == T::GetStaticType())
-				{
-					return comp.get();
-				}
+				if (c->GetType() == t) return c.get();
 			}
-		};
+			return nullptr;
+		}
+
+		//template<typename T>
+		//IComponent* GetComponent() {
+		//	static_assert(std::is_base_of<IComponent, T>::value, L"T hase to be base of IComponent");
+		//	for (std::unique_ptr<IComponent>& comp : m_components)
+		//	{
+		//		if (comp->GetType() == T::GetStaticType())
+		//		{
+		//			return comp.get();
+		//		}
+		//	}
+		//};
 		
 		void AddComponent(std::unique_ptr<IComponent> component) {
 			m_components.push_back(std::move(component));
 		}
+
 		
 	protected:
-		std::vector<std::unique_ptr<RenewEnginePublic::Component>>& GetAllComponents() override { return m_components; };
+		
 
 	protected:
 		XMFLOAT3 m_pos;

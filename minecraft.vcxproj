@@ -164,6 +164,8 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="PCameraComponent.h" />
+    <ClInclude Include="PComponent.h" />
     <ClInclude Include="PEngine.h" />
     <ClInclude Include="PLevel.h" />
     <ClInclude Include="PObject.h" />
@@ -202,6 +204,10 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PixelShader.cso" />
+    <None Include="VertexShader.cso" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

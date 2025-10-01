@@ -1,6 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include "PComponent.h"
+#include "PCameraComponent.h"
 #include <memory>
 
 using namespace DirectX;
@@ -13,11 +14,11 @@ namespace RenewEnginePublic {
 		template<typename T>
 		Component* GetComponent() {
 			static_assert(std::is_base_of<Component, T>::value, "T has to be a Component or inherited !");
-			return
-		}
+			return GetComponent(T::GetStaticType());
+		};
 
 	protected:
-		virtual Component* GetComponent() = 0;
+		virtual Component* GetComponent(Component::Type t) = 0;
 	};
 
 	template<typename T>
