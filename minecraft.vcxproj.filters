@@ -34,11 +34,17 @@
     <Filter Include="RenewEngine\Header Files\Engine">
       <UniqueIdentifier>{c8e76190-bb6f-42ba-be83-b99d27335d24}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RenewEngine\Header Files\Factories">
-      <UniqueIdentifier>{a9bd016d-0006-472c-abbd-f114aaa6d2b2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="RenewEngine\Public">
       <UniqueIdentifier>{4db67c7d-3b02-49d2-a48e-e51eac4da246}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenewEngine\Header Files\Engine\components">
+      <UniqueIdentifier>{da5c90bf-2142-4411-ae47-3a62f56538e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenewEngine\Source Files\Engine\components">
+      <UniqueIdentifier>{187a7e19-b1a3-4986-abae-b966dbde3130}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenewEngine\Header Files\Core\interfaces">
+      <UniqueIdentifier>{14905f4d-6436-447a-a8ae-40577b571d9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -82,9 +88,6 @@
     <ClCompile Include="Object.cpp">
       <Filter>RenewEngine\Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>RenewEngine\Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="VertexShader.cpp">
       <Filter>RenewEngine\Source Files</Filter>
     </ClCompile>
@@ -93,6 +96,12 @@
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>RenewEngine\Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>RenewEngine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>RenewEngine\Source Files\Engine\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>RenewEngine\Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="UploadBuffer.h">
-      <Filter>RenewEngine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JobSystem.h">
       <Filter>RenewEngine\Header Files\Core</Filter>
@@ -141,9 +147,6 @@
     <ClInclude Include="Material.h">
       <Filter>RenewEngine\Header Files\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>RenewEngine\Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
       <Filter>RenewEngine\Header Files\Rendering</Filter>
     </ClInclude>
@@ -159,12 +162,6 @@
     <ClInclude Include="Input.h">
       <Filter>RenewEngine\Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>RenewEngine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IComponent.h">
-      <Filter>RenewEngine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PLevel.h">
       <Filter>RenewEngine\Public</Filter>
     </ClInclude>
@@ -176,6 +173,39 @@
     </ClInclude>
     <ClInclude Include="RenewEngine.h">
       <Filter>RenewEngine\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="PCameraComponent.h">
+      <Filter>RenewEngine\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="PComponent.h">
+      <Filter>RenewEngine\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="PMeshComponent.h">
+      <Filter>RenewEngine\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>RenewEngine\Header Files\Engine\components</Filter>
+    </ClInclude>
+    <ClInclude Include="IComponent.h">
+      <Filter>RenewEngine\Header Files\Engine\components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>RenewEngine\Header Files\Engine\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>RenewEngine\Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="UploadBuffer.h">
+      <Filter>RenewEngine\Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTransform.h">
+      <Filter>RenewEngine\Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsResourceManager.h">
+      <Filter>RenewEngine\Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderer.h">
+      <Filter>RenewEngine\Header Files\Core\interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

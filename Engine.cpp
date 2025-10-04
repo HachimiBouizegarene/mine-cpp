@@ -12,7 +12,6 @@
 #include "Material.h"
 #include <stdexcept>
 
-
 std::unique_ptr<RenewEnginePublic::Engine> RenewEnginePublic::CreateRenewEngine()
 {
 	HINSTANCE hInstance = GetModuleHandleA(NULL);
@@ -22,6 +21,7 @@ std::unique_ptr<RenewEnginePublic::Engine> RenewEnginePublic::CreateRenewEngine(
 void RenewEngine::Engine::Run()
 {
 	// SCENE
+	if (!m_activelevel) throw std::runtime_error("Active Level is required to run the Engine !");
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	int frames = 0;
 	double fps = 0.0;
@@ -29,15 +29,9 @@ void RenewEngine::Engine::Run()
 	{
 		m_window->PeekMessages();
 		ID3D12GraphicsCommandList *commandListPtr =  m_renderer->BeginFrame();
-		m_cbCamera->Update(m_camera->GetCBDataPtr());
-		m_camera->UpdatePosition(0, 0, -0.01f);
-		if (m_gameObject->IsReady())
-		{
-			m_gameObject->Bind(commandListPtr);
-			m_cbCamera->Bind(commandListPtr, 0);
-			m_gameObject->Render(commandListPtr);
-		}
-		
+
+		m_activelevel->Update();
+
 		m_renderer->EndFrame();
 		frames++;
 		auto now = std::chrono::high_resolution_clock::now();
@@ -59,6 +53,7 @@ RenewEnginePublic::Level* RenewEngine::Engine::AddLevel(std::unique_ptr<RenewEng
 	if (!cast) throw std::runtime_error("Invalid Level type passed to the Engine");
 	std::unique_ptr<Level> uPtrCast(cast) ;
 	m_levels.push_back(std::move(uPtrCast));
+	if (!m_activelevel) m_activelevel = cast;
 	return cast;
 }
 
@@ -79,39 +74,39 @@ RenewEngine::Engine::Engine(HINSTANCE hInstance)
 
 	//Temporart Scene
 
-	m_level = std::make_unique<Level>();
-	std::unique_ptr<Object> cameraObj = std::make_unique<Object>();
-	cameraObj->AddComponent(std::make_unique<CameraComponent>());
-	m_level->AddObject(std::move(cameraObj));
+	//m_level = std::make_unique<Level>();
+	//std::unique_ptr<Object> cameraObj = std::make_unique<Object>();
+	//cameraObj->AddComponent(std::make_unique<CameraComponent>());
+	//m_level->AddObject(std::move(cameraObj));
 
-	m_camera = std::make_unique<Camera>(XMFLOAT3(0.0f, 0.0f, 10.0f), 3.14 / 2, static_cast<float>(width) / height);
-	m_cbCamera = std::make_unique<ConstantBuffer>(m_dx12Context->GetDevice(), ConstantBuffer::Type::Camera);
+	////m_camera = std::make_unique<Camera>(XMFLOAT3(0.0f, 0.0f, 10.0f), 3.14 / 2, static_cast<float>(width) / height);
+	//m_cbCamera = std::make_unique<ConstantBuffer>(m_dx12Context->GetDevice(), ConstantBuffer::Type::Camera);
 
-	D3D12_INPUT_ELEMENT_DESC inputElDesc = {};
-	inputElDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElDesc.SemanticName = "POSITION";
-	inputElDesc.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+	//D3D12_INPUT_ELEMENT_DESC inputElDesc = {};
+	//inputElDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	//inputElDesc.SemanticName = "POSITION";
+	//inputElDesc.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
 
-	D3D12_INPUT_ELEMENT_DESC elementsDesc[] = {
-		inputElDesc
-	};
-	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
-	inputLayoutDesc.NumElements = 1;
-	inputLayoutDesc.pInputElementDescs = elementsDesc;
+	//D3D12_INPUT_ELEMENT_DESC elementsDesc[] = {
+	//	inputElDesc
+	//};
+	//D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
+	//inputLayoutDesc.NumElements = 1;
+	//inputLayoutDesc.pInputElementDescs = elementsDesc;
 
-	std::unique_ptr<IndexBuffer> indexBuffer = std::make_unique<IndexBuffer>(m_uploadBuffer.get(), test_indicies, sizeof(test_indicies));
-	std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(m_uploadBuffer.get(), test_vertices, sizeof(test_vertices), sizeof(VertexPos));
+	//std::unique_ptr<IndexBuffer> indexBuffer = std::make_unique<IndexBuffer>(m_uploadBuffer.get(), test_indicies, sizeof(test_indicies));
+	//std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(m_uploadBuffer.get(), test_vertices, sizeof(test_vertices), sizeof(VertexPos));
 
-	m_gameObject = std::make_unique<GameObject>();
-	m_gameObject->SetMesh(std::make_unique<Mesh>(std::move(vertexBuffer), std::move(indexBuffer)));
-	std::vector<Material::RootParameter> rootParams;
-	Material::RootParameter rootParam1 = {};
-	rootParam1.ShaderRegister = 0;
-	rootParam1.type = Material::RootParameter::Type::CBV;
-	rootParams.push_back(rootParam1);
+	//m_gameObject = std::make_unique<GameObject>();
+	//m_gameObject->SetMesh(std::make_unique<Mesh>(std::move(vertexBuffer), std::move(indexBuffer)));
+	//std::vector<Material::RootParameter> rootParams;
+	//Material::RootParameter rootParam1 = {};
+	//rootParam1.ShaderRegister = 0;
+	//rootParam1.type = Material::RootParameter::Type::CBV;
+	//rootParams.push_back(rootParam1);
 
-	m_gameObject->SetMaterial(std::make_unique<Material>(m_psoManager.get(), m_dx12Context->GetDevice(),
-		L"VertexShader.cso", L"PixelShader.cso", inputLayoutDesc, rootParams, PSODesc::CullMode::None));
+	//m_gameObject->SetMaterial(std::make_unique<Material>(m_psoManager.get(), m_dx12Context->GetDevice(),
+	//	L"VertexShader.cso", L"PixelShader.cso", inputLayoutDesc, rootParams, PSODesc::CullMode::None));
 
 
 }

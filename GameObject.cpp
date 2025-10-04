@@ -10,7 +10,6 @@ void RenewEngine::Mesh::Draw(ID3D12GraphicsCommandList* commandListPtr)
 {
 	m_indexBuffer->Bind(commandListPtr);
 	m_vertexBuffer->Bind(commandListPtr);
-	
 	commandListPtr->DrawIndexedInstanced(m_indexBuffer->GetNumIndices(), 1, 0, 0, 0);
 }
 

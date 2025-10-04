@@ -7,8 +7,9 @@ namespace RenewEnginePublic {
 		virtual ~Component() = default;
 		enum class Type : char
 		{
-			Camera, None
+			None, Camera, Mesh
 		};
+
 		static Type GetStaticType() {
 			return Type::None;
 		};

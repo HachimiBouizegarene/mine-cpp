@@ -11,12 +11,12 @@ namespace RenewEngine
 {
 	struct PSODesc
 	{
+
 		enum class CullMode
 		{
 			Back, Front, None
 		};
-
-
+			
 		std::unique_ptr<VertexShader> VS;
 		std::unique_ptr<Shader> PS;
 		D3D12_INPUT_LAYOUT_DESC layoutDesc;

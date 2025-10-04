@@ -1,4 +1,5 @@
 #pragma once
+
 #include <memory>
 #include "RenewWindow.h"
 #include <Windows.h>
@@ -8,7 +9,6 @@
 #include "Level.h"
 #include "IndexBuffer.h"
 #include "UploadBuffer.h"
-#include "Camera.h"
 #include "PSOManager.h"
 #include <iostream>
 #include "GameObject.h"
@@ -16,27 +16,39 @@
 #include "ConstantBuffer.h"
 #include "PEngine.h"
 #include "PLevel.h"
+
 namespace RenewEngine {
 	class Engine : public RenewEnginePublic::Engine
 	{
+		enum API
+		{
+			DIRECTX12,
+		};
+
+
+		class Context
+		{
+			JobSystem* jobSystem;
+		};
 	public:
 		Engine(HINSTANCE hInstance);
 		void Run() override;
 		RenewEnginePublic::Level* AddLevel(std::unique_ptr<RenewEnginePublic::Level> level) override;
 
+		ID3D12Device* GetDevice()
+		{
+			return m_dx12Context->GetDevice();
+		}
 	private:
 		std::unique_ptr<RenewWindow> m_window;
 		std::unique_ptr<Renderer> m_renderer;
 		std::unique_ptr<JobSystem> m_jobSystem;
 		std::unique_ptr<UploadBuffer> m_uploadBuffer;
 		std::unique_ptr<PSOManager> m_psoManager;
-		//Temporary
-		std::unique_ptr<Camera> m_camera;
-		std::unique_ptr<GameObject> m_gameObject;
-		std::unique_ptr<ConstantBuffer> m_cbCamera;
-		std::unique_ptr<Level> m_level;
 		std::unique_ptr<DX12Context> m_dx12Context;
-
+		//Temporary
+	
+		Level* m_activelevel = nullptr;
 		std::vector<std::unique_ptr<Level>> m_levels;
 	};
 }

@@ -9,7 +9,7 @@ namespace RenewEngine {
 	class IndexBuffer  : public ResourceBase{
 
 	public:
-		IndexBuffer(UploadBuffer* uploadBuffer, UINT indices[], UINT indicesSizeInBytes);
+		IndexBuffer(UploadBuffer* uploadBuffer, UINT* indices, UINT indicesSizeInBytes);
 		D3D12_INDEX_BUFFER_VIEW* GetViewPtr();
 		void Bind(ID3D12GraphicsCommandList *commandList);
 

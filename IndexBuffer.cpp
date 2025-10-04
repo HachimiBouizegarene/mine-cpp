@@ -1,7 +1,7 @@
 #include "IndexBuffer.h"
 #include <iostream>
 
-RenewEngine::IndexBuffer::IndexBuffer(UploadBuffer* uploadBuffer, UINT indices[], UINT indicesSizeInBytes) : m_uploadBuffer(uploadBuffer), m_numIndices(indicesSizeInBytes / 4)
+RenewEngine::IndexBuffer::IndexBuffer(UploadBuffer* uploadBuffer, UINT* indices, UINT indicesSizeInBytes) : m_uploadBuffer(uploadBuffer), m_numIndices(indicesSizeInBytes / 4)
 {
     
     m_view.SizeInBytes = indicesSizeInBytes;

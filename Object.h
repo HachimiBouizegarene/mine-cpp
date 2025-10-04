@@ -5,23 +5,46 @@
 #include "IComponent.h"
 #include <d3d12.h>
 #include "PObject.h"
+#include "ObjectTransform.h"
+
 using namespace DirectX;
 
 namespace RenewEngine
 {
+	class Level;
+
 	class Object : public RenewEnginePublic::Object
 	{
 	public:
-		Object(XMFLOAT3 pos = XMFLOAT3(0.0f, 0.0f, 0.0f));
+		ObjectTransform& GetTransform() {
+			return m_transform;
+		};
+		Object();
+		explicit Object(XMFLOAT3 pos);
 		void SetPosition(const XMFLOAT3& pos) override;
 		void UpdatePosition(const float& x, const float& y, const float& z) override;
-		void Update(ID3D12GraphicsCommandList* commandList) {
+		void Update() {
 			for (std::unique_ptr<IComponent>& comp : m_components)
 			{
-				comp->Update(commandList);
+				comp->Update();
 			}
-		};
+		};		
+		void AddComponent(std::unique_ptr<IComponent> component) {
+			m_components.push_back(std::move(component));
+		}
 
+		template<typename T>
+		T* GetComponent()
+		{
+			for (std::unique_ptr<IComponent>& c : m_components)
+			{
+				if(c->GetType() == T::GetStaticType()) return (T*) c.get();
+			}
+			return nullptr;
+		}
+
+ 		
+	protected:
 		RenewEnginePublic::Component* GetComponent(RenewEnginePublic::Component::Type t) override {
 			for (std::unique_ptr<IComponent>& c : m_components)
 			{
@@ -29,29 +52,10 @@ namespace RenewEngine
 			}
 			return nullptr;
 		}
-
-		//template<typename T>
-		//IComponent* GetComponent() {
-		//	static_assert(std::is_base_of<IComponent, T>::value, L"T hase to be base of IComponent");
-		//	for (std::unique_ptr<IComponent>& comp : m_components)
-		//	{
-		//		if (comp->GetType() == T::GetStaticType())
-		//		{
-		//			return comp.get();
-		//		}
-		//	}
-		//};
-		
-		void AddComponent(std::unique_ptr<IComponent> component) {
-			m_components.push_back(std::move(component));
-		}
-
-		
-	protected:
-		
+		RenewEnginePublic::Component* AddNewComponent(RenewEnginePublic::Component::Type t) override;
 
 	protected:
-		XMFLOAT3 m_pos;
+		ObjectTransform m_transform = {};
 		std::vector<std::unique_ptr<IComponent>> m_components;
 	};
 }
